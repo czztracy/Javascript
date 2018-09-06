@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<style type="text/css">
+	#outer  {
+        width: 200px; height: 200px; background: red; padding: 20px;
+    }
+    #inner {
+        width: 200px; height: 200px; background: blue;
+    }
+</style>
+<body>
+	<div id="outer">
+		<div id="inner"></div>
+	</div>
+	<ul id="color-list">
+	    <li>red</li>
+	    <li>yellow</li>
+	    <li>blue</li>
+	    <li>green</li>
+	    <li>black</li>
+	    <li>white</li>
+	</ul>
+	<script type="text/javascript">
+		window.onload = function() {
+			//(1)事件冒泡： 从里往外触发
+			var outer = document.getElementById("outer");
+			var inner = document.getElementById("inner");
+
+			const Outer = function() {
+				alert('外边');
+			}
+			const Inner = function() {
+				alert('里边');
+			}
+			
+			//冒泡 点击里边的外边也触发 里边先触发
+			/*inner.addEventListener('click', Inner, false);
+			outer.addEventListener('click', Outer, false);*/
+
+			//(2)s事件捕捉 点击里边的外边先触发
+			inner.addEventListener('click', Inner, true);
+			outer.addEventListener('click', Outer, true);
+			
+
+			//(3) 事件委托
+			var Color = document.getElementById('color-list');
+			Color.addEventListener('click', show, false);
+
+			function show(e) {
+				var e = e || window.event;
+				var e = e.target || e.srcElement;
+				if(e.nodeName.toLowerCase() == 'li') {
+					console.log(e.innerHTML);
+				}
+			}
+		}
+	</script>
+</body>
+</html>
