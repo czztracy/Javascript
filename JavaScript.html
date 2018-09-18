@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<button id="btn">点击</button>
+	<script type="text/javascript">
+		window.onload = function() {
+			var arr = [1, 2, 3];
+
+			// 1. map 接收两个参数  一个回调函数 一个回调函数的this值 一般只写一个回调就可以了
+			arr.map( (parseInt, index, arr) => {
+				console.log(parseInt, index, arr);
+			});
+
+			// 2. forEach  就收两个参数 一个回调 一个回调函数的this值 一般只写一个回调就可以了
+			arr.forEach((currentValue, index, arr) => {
+				console.log(currentValue, index, arr);
+			});
+
+			//理论上map是快于forEach的   实际测试 map 慢一些
+
+
+			// 3. filter 做筛选
+			const newArr = arr.filter( (number, index, arr) => index > 0 );
+			console.log(newArr);
+
+			// 4. instanceof 鉴定constructor.prototype是否在原型链基础上
+			function Animal(name) {
+				this.name = name || 'Czz'
+			}
+			Animal.prototype.eat = function() {
+				console.log(111);
+			}
+			var a = new Animal();
+			console.log(a instanceof Animal); //true
+
+			// 5. typeof 鉴定字符串类型
+
+			var obj = {
+				a: 1,
+				b: 2
+			}
+			console.log(typeof obj); //object
+
+			// 6. Promise 用法
+
+			var promise = new Promise( (resolve, reject) => {
+				if ( 1 === 1 ) {
+					resolve('成功');
+				} else {
+					reject('失败');
+				}
+			})
+
+			promise.then( value => {
+				console.log(value);
+			}).catch( error => {
+				console.log(error);
+			})
+
+			// 7. 闭包 能够读取其他函数内部变量的函数。 缺点：会造成内存泄漏。 优点：安全。
+			function foo(x) {
+				var tmp = 3;
+				return function(y) {
+					console.log(x + y + ( ++tmp ));
+				}
+			}
+			var bar = foo(2); // bar 是个闭包
+			bar(10); // 16
+
+			// 8. 深浅拷贝
+			let A = {
+				aa: 1,
+				bb: 2,
+				cc: 3,
+				dd: {
+					ee: 5
+				},
+				ff: {
+					gg: 6
+				}
+			};
+			// 深复制包含子对象
+			let d = JSON.parse(JSON.stringify(A));
+			// 拷贝一层但不包含子对象
+			let c = {...A};
+			//浅拷贝
+			let b = A;
+			b.bb = 22;
+			c.cc = 33;
+			d.ff.gg = 66;
+
+			console.log(A);
+			console.log(d);
+			console.log(c);
+			console.log(b);
+
+			// 9. 数组去重
+			// 思路1：定义一个新数组，并存放原数组的第一个元素，然后将原数组一一和新数组的元素对比，如不同则放在新数组中。
+			// 思路2： 先将原数组排序，在与相邻的进行比较，如果不同则存入新的数组。
+			// 思路3：利用对象属性存在的特性，如果没有该属性则存入新数组。
+			// 思路4（最常用）：使用es6 set
+
+			let Arr = [1, 2, 3, 3, 4, 5, 6, 7, 7, 2, 8];
+			console.log([...new Set(Arr)]);
+
+			// 10. 数组合并去重排序
+
+			let arr1 = [1, 25, 2, 26, 1234, 6, 213];
+			let arr2 = [2, 6, 2134, 6, 31, 623];
+			let newC = [...new Set([...arr1, ...arr2])].sort((a, b) => {
+				return a - b;
+			});
+			//var B = arr1.concat(arr2);
+			//var B = arr1.join('');
+			var B = arr1.slice(0, 2);
+			console.log(newC, B);
+
+			let str = '123456';
+			//console.log(str.substring(2, 4)); //34
+			//console.log(str.replace('12', 'Czz'));//Czz3456
+			console.log(str.split(''));
+
+			// 11. DOM相关
+
+			/**
+			 * dom 事件模型
+			 */
+
+			/* ① DOM0：同一个元素，同类事件只能添加一个，如果添加多个，后面添加的会覆盖之前添加的*/
+			var btn = document.getElementById('btn');
+			/*btn.onclick = function() {
+				alert('Hello2');
+			}*/
+
+			/* ② DOM2:可以给同一个元素添加多个同类事件*/
+			btn.addEventListener('click', function() {
+				alert('hello1');
+			});
+			btn.addEventListener('click', function() {
+				alert('hello2');
+			});
+
+			// 12. 事件委托  给父元素添加事件 通过事件冒泡排查元素是否为指定元素
+			function show(e) {
+				var e = e.target || window.event.srcElement;
+				if(e.nodeName.toLowerCase() == 'li') {
+					console.log(e.innerHTML);
+				}
+			}			
+		}
+	</script>
+	
+</body>
+</html> 
+
