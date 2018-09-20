@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript">
+		window.onload = function() {
+			/**
+			 * 能够读取其他函数内部变量的函数
+			 */
+			function a() {
+				var n = 0;
+				this.fun = function() {
+					n++;
+					console.log(n);
+				}
+			}
+			var c = new a();
+			c.fun(); // 1
+			c.fun(); //2
+		}
+	</script>
+</body>
+</html>
